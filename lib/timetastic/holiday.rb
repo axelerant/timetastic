@@ -33,7 +33,6 @@ module Timetastic
         query_string=(filters[0 ... -1].each { |s| s << "&" } << filters[-1]).join('')
         url = url + query_string
       end
-      puts "url = #{url}"
       response = conn.get(url)
       holidays = JSON.parse(response.body)["holidays"]
       holidays.map { |attributes| new(attributes) }
@@ -54,7 +53,6 @@ module Timetastic
       leave_type_id = Timetastic::LeaveType.all({},{'name' => leave_type}).first.id
       post_request = { :from => from_date, :to => to_date, :fromTime => from_time, :toTime => to_time, :reason => reason, :userOrDepartmentId => user_id, :bookFor => "User", :leaveTypeId => leave_type_id}
       response = conn.post("#{API_URL}/holidays", post_request)
-      puts response.body
       json_response = JSON.parse(response.body)
     end
   end
